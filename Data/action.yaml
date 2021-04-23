@@ -1,0 +1,6 @@
+
+- by : css selector
+  locator : .el-input__inner
+  action : send_keys
+  value : uatzzq
+
