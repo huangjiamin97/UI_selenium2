@@ -14,7 +14,15 @@ class BasePage:
     _driver = None
     _url = ""
     def __init__(self, driver:WebDriver = None):
-        if self._driver is None:
+        self.byDic = {
+            'id': By.ID,
+            'name': By.NAME,
+            'class_name': By.CLASS_NAME,
+            'xpath': By.XPATH,
+            'link_text': By.LINK_TEXT,
+            'css_selector':By.CSS_SELECTOR
+        }
+        if driver is None:
             # self._driver = webdriver.Chrome()
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument('--no-sandbox')
@@ -28,9 +36,16 @@ class BasePage:
 
             self._driver.get(self._url)
 
+    def finds_element(self, by, locator):
 
-    def find_element(self,by,locator):
-        return self._driver.find_element(by, locator)
+        # try:
+        #     # print('[Info:Starting find the element "{}" by "{}"!]'.format(locator, by))
+        #     element = WebDriverWait(self._driver, timeout=20).until(lambda x: x.find_element(by, locator))
+        # except TimeoutException as t:
+        #     print('error: found "{}" timeout!'.format(locator), t)
+        # else:
+        #     return element
+        return self._driver.find_element(self.byDic[by], locator)
 
     def close_chrome(self):
         self._driver.close()
@@ -48,13 +63,14 @@ class BasePage:
     '''
     解析yaml文件
     '''
-    def action_yaml(self,path):
-        with open(path) as f:
-            actions =yaml.safe_load(f)
-        for action in actions:
-            if 'by' in action.keys():
-                element = self.find_element(action["by"], action["locator"])
-            if 'send_keys' == action['action']:
-                element.send_keys('uatzzq')
+    # def action_yaml(self,path):
+    #     with open(path) as f:
+    #         actions =yaml.safe_load(f)
+    #     for action in actions:
+    #         if 'by' in action.keys():
+    #             element = self.find_element(action["by"], action["locator"])
+    #         if 'send_keys' == action['action']:
+    #             element.send_keys('uatzzq')
 
-
+    def get_hsource(self):
+        return self._driver.page_source()
